@@ -1,18 +1,21 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { FaPlay, FaPause, FaStepForward, FaArrowLeft, FaVolumeUp, FaVolumeMute, FaList } from 'react-icons/fa';
-import { BiRewind, BiFastForward } from 'react-icons/bi';
-import { RiFullscreenFill, RiFullscreenExitFill, RiSpeedFill } from 'react-icons/ri';
+import { FaArrowLeft } from 'react-icons/fa';
 import PropTypes from 'prop-types';
-import './Player.css';
+import VideoControls from './components/VideoControls';
+import EpisodesModal from './components/EpisodesModal';
+import DescriptionOverlay from './components/DescriptionOverlay';
+import { episodesList } from './constants/episodes';
+import './styles/Player.css';
 
 const Player = ({ 
   title, 
-  currentEpisode, 
+  subTitle, 
   description 
 }) => {
   const [playing, setPlaying] = useState(false);
   const [showControls, setShowControls] = useState(false);
   const [showDescription, setShowDescription] = useState(false);
+  const [showEpisodeModal, setShowEpisodeModal] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [isMouseActive, setIsMouseActive] = useState(true);
   const [volume, setVolume] = useState(1);
@@ -23,6 +26,8 @@ const Player = ({
   const [duration, setDuration] = useState(0);
   const [buffered, setBuffered] = useState(0);
   const [previewPosition, setPreviewPosition] = useState({ x: 0, time: 0 });
+  const [selectedSeason, setSelectedSeason] = useState(1);
+  
   const videoRef = useRef(null);
   const containerRef = useRef(null);
   const progressRef = useRef(null);
@@ -31,6 +36,9 @@ const Player = ({
   const seekTimeout = useRef(null);
   const controlsTimeoutRef = useRef(null);
   let inactivityTimeout = null;
+
+  // Get unique seasons from episodes list
+  const seasons = [...new Set(episodesList.map(episode => episode.season))];
 
   const handlePlayPause = () => {
     if (videoRef.current) {
@@ -206,6 +214,12 @@ const Player = ({
     setPreviewPosition({ x: 0, time: 0 });
   };
 
+  const handleEpisodeClick = (episode) => {
+    // Here you would implement the logic to change the current episode
+    console.log('Switching to episode:', episode);
+    setShowEpisodeModal(false);
+  };
+
   // Initialize preview video when component mounts
   React.useEffect(() => {
     if (previewVideoRef.current) {
@@ -256,7 +270,7 @@ const Player = ({
 
   // Clean up timers
   // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
-    useEffect(() => {
+  useEffect(() => {
     return () => {
       clearInactivityTimer();
       if (controlsTimeoutRef.current) {
@@ -282,7 +296,7 @@ const Player = ({
         preload="auto"
         tabIndex="-1"
       >
-        <track 
+        <track
           kind="captions"
           src="/captions/en.vtt"
           srcLang="en"
@@ -326,173 +340,68 @@ const Player = ({
       </video>
 
       {!showDescription && (
-        <div 
-          className={`controls-overlay ${showControls ? 'visible' : ''}`}
-          role="toolbar"
-          aria-label="Video controls"
-        >
-          <div className="video-info">
-            <h2 className="video-title">{title}</h2>
-            <span className="episode-number">{currentEpisode}</span>
-          </div>
-
-          <div 
-            className="progress-container"
-            ref={progressRef}
-            onClick={handleProgressClick}
-            onKeyDown={(e) => {
-              if (e.key === 'ArrowRight') {
-                videoRef.current.currentTime += 5;
-              } else if (e.key === 'ArrowLeft') {
-                videoRef.current.currentTime -= 5;
-              }
-            }}
-            onMouseMove={handleProgressHover}
-            onMouseLeave={handleProgressLeave}
-            role="slider"
-            aria-label="Video progress control"
-            aria-valuemin="0"
-            aria-valuemax="100"
-            aria-valuenow={progress}
-            tabIndex="0"
-          >
-            <div className="progress-bar">
-              <div className="progress-buffer" style={{ width: `${buffered}%` }} />
-              <div className="progress" style={{ width: `${progress}%` }} />
-            </div>
-            <div 
-              className="preview-container"
-              style={{ 
-                left: `${previewPosition.x}px`,
-                display: previewPosition.x ? 'block' : 'none'
-              }}
-            >
-              <canvas 
-                ref={previewRef}
-                width="160"
-                height="90"
-                className="preview-canvas"
-              />
-              <div className="preview-time">{formatTime(previewPosition.time)}</div>
-            </div>
-
-            <div className="progress-time">
-              <span>{formatTime(videoRef.current?.currentTime || 0)}</span>
-              <span>{formatTime(duration)}</span>
-            </div>
-          </div>
-
-          <div className="controls-buttons">
-            <div className="controls-left">
-              <button 
-                className="control-button" 
-                onClick={handlePlayPause}
-                onKeyUp={handlePlayPause}
-                type="button"
-              >
-                {playing ? <FaPause size={24} /> : <FaPlay size={24} />}
-              </button>
-
-              <button className="control-button" onClick={() => handleSeek(-10)} type="button">
-                <BiRewind size={44} />
-                <span className="seek-label">-10s</span>
-              </button>
-
-              <button className="control-button" onClick={() => handleSeek(10)} type="button">
-                <BiFastForward size={44} />
-                <span className="seek-label">+10s</span>
-              </button>
-
-              <div className="volume-control">
-                <button className="control-button" onClick={handleMuteToggle} type="button">
-                  {isMuted ? <FaVolumeMute size={24} /> : <FaVolumeUp size={24} />}
-                </button>
-                <input
-                  type="range"
-                  min="0"
-                  max="1"
-                  step="0.1"
-                  value={isMuted ? 0 : volume}
-                  onChange={handleVolumeChange}
-                  className="volume-slider"
-                  aria-label="Volume"
-                />
-              </div>
-            </div>
-
-            <div className="controls-right">
-              <button className="control-button" onClick={handleNext} type="button">
-                <FaStepForward size={24} />
-                <span className="seek-label">Next</span>
-              </button>
-
-              <button className="control-button" type="button">
-                <FaList size={24} />
-                <span className="seek-label">Episodes</span>
-              </button>
-
-              <div className="speed-control">
-                <button 
-                  className="control-button" 
-                  onClick={() => setShowSpeedMenu(!showSpeedMenu)}
-                  type="button"
-                >
-                  <span className="speed-counter">{playbackSpeed}x</span>
-                  <span className="seek-label">Speed</span>
-                </button>
-                {showSpeedMenu && (
-                  <div className="speed-menu">
-                    {[0.5, 1, 1.25, 1.5, 2].map((speed) => (
-                      <button
-                        key={speed}
-                        className={`speed-option ${playbackSpeed === speed ? 'active' : ''}`}
-                        onClick={() => handleSpeedChange(speed)}
-                        type="button"
-                      >
-                        {speed}x
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </div>
-
-              <button className="control-button" onClick={handleFullscreen} type="button">
-                {isFullscreen ? 
-                  <RiFullscreenExitFill size={24} /> : 
-                  <RiFullscreenFill size={24} />
-                }
-              </button>
-            </div>
-          </div>
-        </div>
+        <VideoControls
+          playing={playing}
+          showControls={showControls}
+          title={title}
+          subTitle={subTitle}
+          progress={progress}
+          buffered={buffered}
+          duration={duration}
+          volume={volume}
+          isMuted={isMuted}
+          playbackSpeed={playbackSpeed}
+          showSpeedMenu={showSpeedMenu}
+          isFullscreen={isFullscreen}
+          previewPosition={previewPosition}
+          videoRef={videoRef}
+          progressRef={progressRef}
+          previewRef={previewRef}
+          onPlayPause={handlePlayPause}
+          onSeek={handleSeek}
+          onNext={handleNext}
+          onShowEpisodes={() => setShowEpisodeModal(true)}
+          onVolumeChange={handleVolumeChange}
+          onMuteToggle={handleMuteToggle}
+          onSpeedChange={handleSpeedChange}
+          onToggleSpeedMenu={() => setShowSpeedMenu(!showSpeedMenu)}
+          onFullscreen={handleFullscreen}
+          onProgressClick={handleProgressClick}
+          onProgressHover={handleProgressHover}
+          onProgressLeave={handleProgressLeave}
+          formatTime={formatTime}
+        />
       )}
 
-      {/* Description Overlay */}
-      {showDescription && !playing && (
-        <aside 
-          className="description-overlay"
-          aria-label="Episode description"
-        >
-          <div className="description-content">
-            <h1>{title}</h1>
-            <h2>{currentEpisode}</h2>
-            <p>{description}</p>
-          </div>
-        </aside>
-      )}
+      <EpisodesModal
+        showModal={showEpisodeModal}
+        episodes={episodesList}
+        selectedSeason={selectedSeason}
+        seasons={seasons}
+        onSeasonChange={setSelectedSeason}
+        onEpisodeClick={handleEpisodeClick}
+        onClose={() => setShowEpisodeModal(false)}
+      />
+
+      <DescriptionOverlay
+        show={showDescription && !playing}
+        title={title}
+        subTitle={subTitle}
+        description={description}
+      />
     </div>
   );
 };
 
 Player.propTypes = {
   title: PropTypes.string,
-  currentEpisode: PropTypes.string,
+  subTitle: PropTypes.string,
   description: PropTypes.string
 };
 
 Player.defaultProps = {
   title: "Big Buck Bunny",
-  currentEpisode: "S1:E1",
+  subTitle: "S1:E1",
   description: "A large and lovable rabbit deals with three tiny bullies, led by a flying squirrel, who are determined to squelch his happiness."
 };
 

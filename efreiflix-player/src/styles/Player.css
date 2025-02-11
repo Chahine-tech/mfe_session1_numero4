@@ -1,5 +1,17 @@
 * {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
   font-family: "Montserrat", sans-serif;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
 }
 
 .video-container {
@@ -8,16 +20,8 @@
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: #000;
-  cursor: pointer;
-}
-
-.video-container.cursor-hidden {
-  cursor: none;
-}
-
-.video-container.cursor-hidden:hover {
-  cursor: none;
+  background-color: black;
+  overflow: hidden;
 }
 
 .video-player {
@@ -26,31 +30,52 @@
   object-fit: contain;
 }
 
+.preview-video {
+  display: none;
+}
+
 .back-button {
   position: absolute;
   top: 20px;
   left: 20px;
-  z-index: 10;
-  background: rgba(0, 0, 0, 0.6);
+  background: none;
   border: none;
-  border-radius: 50%;
-  padding: 12px;
-  cursor: pointer;
   color: white;
+  padding: 10px;
+  cursor: pointer;
   opacity: 0;
-  transition: all 0.3s ease;
-  transform: scale(0.9);
-  display: none;
-}
-
-.back-button:hover {
-  background: rgba(255, 255, 255, 0.2);
-  transform: scale(1);
+  transition: opacity 0.3s ease;
+  z-index: 100;
 }
 
 .back-button.visible {
   opacity: 1;
-  display: block;
+}
+
+.cursor-hidden {
+  cursor: none;
+}
+
+.close-modal {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 2em;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.close-modal:hover {
+  color: #e50914;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 .controls-overlay {
@@ -304,12 +329,6 @@
   margin-bottom: 4px;
 }
 
-.episode-number {
-  font-size: 0.9rem;
-  opacity: 0.8;
-  font-weight: 400;
-}
-
 .volume-control {
   display: flex;
   align-items: center;
@@ -422,15 +441,6 @@
   font-weight: 500;
 }
 
-.preview-video {
-  position: absolute;
-  width: 0;
-  height: 0;
-  visibility: hidden;
-  pointer-events: none;
-  will-change: currentTime;
-}
-
 /* Improve preview performance */
 .preview-canvas {
   width: 160px;
@@ -527,20 +537,7 @@
 
 .speed-counter {
   font-weight: bold;
-  font-size: 1.8em;
+  font-size: 1.2em;
   color: white;
-  margin-right: 8px;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-  font-family: "Montserrat", sans-serif;
-}
-
-.speed-control .control-button {
-  padding: 8px 12px;
-  background: rgba(0, 0, 0, 0.5);
-  border-radius: 4px;
-  transition: all 0.2s ease;
-}
-
-.speed-control .control-button:hover {
-  background: rgba(255, 255, 255, 0.1);
+  margin-right: 4px;
 }
