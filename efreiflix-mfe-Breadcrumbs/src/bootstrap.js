@@ -1,10 +1,10 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
-import Skeleton from './Breadcrumbs';
+import Breadcrumbs from './Breadcrumbs';
 
 const mount = (el) => {
   const root = createRoot(el);
-  root.render(<Skeleton />);
+  root.render(<Breadcrumbs />);
   return root;
 };
 

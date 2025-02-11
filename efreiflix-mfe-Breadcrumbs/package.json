@@ -1,5 +1,5 @@
 {
-  "name": "efreiflix-mfe-skeleton",
+  "name": "efreiflix-mfe-Breadcrumbs",
   "version": "1.0.0",
   "scripts": {
     "start": "webpack serve --mode development",
