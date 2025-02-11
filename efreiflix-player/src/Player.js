@@ -281,7 +281,15 @@ const Player = ({
         src="http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
         preload="auto"
         tabIndex="-1"
-      />
+      >
+        <track 
+          kind="captions"
+          src="/captions/en.vtt"
+          srcLang="en"
+          label="English"
+          default
+        />
+      </video>
 
       <button 
         className={`back-button ${isMouseActive ? 'visible' : ''}`}
@@ -322,7 +330,6 @@ const Player = ({
           className={`controls-overlay ${showControls ? 'visible' : ''}`}
           role="toolbar"
           aria-label="Video controls"
-          tabIndex="0"
         >
           <div className="video-info">
             <h2 className="video-title">{title}</h2>
@@ -333,16 +340,25 @@ const Player = ({
             className="progress-container"
             ref={progressRef}
             onClick={handleProgressClick}
-            onKeyUp={handleProgressClick}
+            onKeyDown={(e) => {
+              if (e.key === 'ArrowRight') {
+                videoRef.current.currentTime += 5;
+              } else if (e.key === 'ArrowLeft') {
+                videoRef.current.currentTime -= 5;
+              }
+            }}
             onMouseMove={handleProgressHover}
             onMouseLeave={handleProgressLeave}
-            tabIndex="0"
-            role="group"
+            role="slider"
             aria-label="Video progress control"
+            aria-valuemin="0"
+            aria-valuemax="100"
+            aria-valuenow={progress}
+            tabIndex="0"
           >
             <div className="progress-bar">
-              <div className="progress-buffer" style={{ width: `${buffered}%` }}></div>
-              <div className="progress" style={{ width: `${progress}%` }}></div>
+              <div className="progress-buffer" style={{ width: `${buffered}%` }} />
+              <div className="progress" style={{ width: `${progress}%` }} />
             </div>
             <div 
               className="preview-container"
@@ -421,8 +437,8 @@ const Player = ({
                   onClick={() => setShowSpeedMenu(!showSpeedMenu)}
                   type="button"
                 >
-                  <RiSpeedFill size={24} />
-                  <span className="seek-label">Speed ({playbackSpeed}x)</span>
+                  <span className="speed-counter">{playbackSpeed}x</span>
+                  <span className="seek-label">Speed</span>
                 </button>
                 {showSpeedMenu && (
                   <div className="speed-menu">
@@ -456,7 +472,6 @@ const Player = ({
         <aside 
           className="description-overlay"
           aria-label="Episode description"
-          tabIndex="0"
         >
           <div className="description-content">
             <h1>{title}</h1>
