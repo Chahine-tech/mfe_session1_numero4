@@ -96,7 +96,7 @@
           "avatar": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/31152e75-8fca-497f-bef6-aa065dd7cb67/original=true,quality=90/8A28H215PTYKEQ64TD8EEK2MV0.jpeg",
           "lang": "fr",
           "watchlist": [2, 4],
-          "favorites": [1],
+          "favorites": [1]
         },
         {
           "id": 2,
@@ -106,7 +106,7 @@
           "avatar": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/3cd5e7b7-47fe-470a-b1df-356c700f0c4e/anim=false,width=450/54947162.jpeg",
           "lang": "fr",
           "watchlist": [],
-          "favorites": [],
+          "favorites": []
         }
       ]
     },
@@ -124,7 +124,7 @@
           "avatar": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/31152e75-8fca-497f-bef6-aa065dd7cb67/original=true,quality=90/8A28H215PTYKEQ64TD8EEK2MV0.jpeg",
           "lang": "fr",
           "watchlist": [1, 5],
-          "favorites": [],
+          "favorites": []
         }
       ]
     }
