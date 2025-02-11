@@ -1,6 +1,6 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
-import Skeleton from './Skeleton';
+import Skeleton from './Breadcrumbs';
 
 const mount = (el) => {
   const root = createRoot(el);
