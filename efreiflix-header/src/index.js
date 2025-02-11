@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client';
 import Header from './Header';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faTwitter, faFacebookF, faInstagram } from '@fortawesome/free-brands-svg-icons';
+import './styles.css';
 
 const mount = () => {
   const container = document.getElementById('root');
