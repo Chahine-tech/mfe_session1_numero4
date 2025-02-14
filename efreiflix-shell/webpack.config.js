@@ -46,6 +46,7 @@ module.exports = {
                 header: "header@http://localhost:3001/remoteEntry.js", // Configuration pour consommer le MFE 'header'
                 skeleton: "skeleton@http://localhost:3002/remoteEntry.js",
                 films: "films@http://localhost:3004/remoteEntry.js",
+                about: "about@http://localhost:3005/remoteEntry.js",
             },
 
             shared: {

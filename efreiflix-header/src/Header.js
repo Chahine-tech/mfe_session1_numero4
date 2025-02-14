@@ -13,7 +13,7 @@ const Header = () => {
                     <nav className="flex items-center space-x-6 text-sm font-medium">
                         <a
                             className="transition-colors hover:text-foreground/80"
-                            href="/browse"
+                            href="/parcourir"
                         >
                             Parcourir
                         </a>
