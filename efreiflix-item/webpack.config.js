@@ -2,17 +2,16 @@ const ModuleFederationPlugin = require("webpack/lib/container/ModuleFederationPl
 const path = require("path");
 const { dependencies } = require("./package.json");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
-const CopyWebpackPlugin = require("copy-webpack-plugin");
 
 module.exports = {
   entry: "./src/index.js",
   output: {
     filename: "bundle.js",
     path: path.resolve(__dirname, "dist"),
-    publicPath: "http://localhost:3004/", // Nouveau port pour le player
+    publicPath: "http://localhost:3003/", // New port for item MFE
   },
   devServer: {
-    port: 3004,
+    port: 3003,
     static: {
       directory: path.join(__dirname, "public"),
     },
@@ -35,21 +34,17 @@ module.exports = {
           },
         },
       },
-      {
-        test: /\.css$/,
-        use: ["style-loader", "css-loader"],
-      },
     ],
   },
   plugins: [
     new ModuleFederationPlugin({
-      name: "player",
+      name: "item",
       filename: "remoteEntry.js",
       remotes: {
         shell: "shell@http://localhost:3000/remoteEntry.js",
       },
       exposes: {
-        "./Player": "./src/Player",
+        "./ItemCard": "./src/ItemCard",
       },
       shared: {
         react: {
@@ -62,18 +57,15 @@ module.exports = {
           requiredVersion: dependencies["react-dom"],
           eager: true,
         },
+        "styled-components": {
+          singleton: true,
+          requiredVersion: dependencies["styled-components"],
+          eager: true,
+        },
       },
     }),
     new HtmlWebpackPlugin({
       template: "./public/index.html",
-    }),
-    new CopyWebpackPlugin({
-      patterns: [
-        {
-          from: "public/captions",
-          to: "captions",
-        },
-      ],
     }),
   ],
   resolve: {

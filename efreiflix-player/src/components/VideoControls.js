@@ -1,9 +1,17 @@
-import React from 'react';
-import { FaPlay, FaPause, FaStepForward, FaVolumeUp, FaVolumeMute, FaList } from 'react-icons/fa';
-import { BiRewind, BiFastForward } from 'react-icons/bi';
-import { RiFullscreenFill, RiFullscreenExitFill } from 'react-icons/ri';
-import PropTypes from 'prop-types';
-import '../styles/VideoControls.css';
+import PropTypes from "prop-types";
+import React from "react";
+import { useTranslation } from "react-i18next";
+import { BiFastForward, BiRewind } from "react-icons/bi";
+import {
+  FaList,
+  FaPause,
+  FaPlay,
+  FaStepForward,
+  FaVolumeMute,
+  FaVolumeUp,
+} from "react-icons/fa";
+import { RiFullscreenExitFill, RiFullscreenFill } from "react-icons/ri";
+import "../styles/VideoControls.css";
 
 const VideoControls = ({
   playing,
@@ -34,8 +42,10 @@ const VideoControls = ({
   onProgressClick,
   onProgressHover,
   onProgressLeave,
-  formatTime
+  formatTime,
 }) => {
+  const { t } = useTranslation();
+
   return (
     <div
       className={`controls-overlay ${showControls ? 'visible' : ''}`}
@@ -52,9 +62,9 @@ const VideoControls = ({
         ref={progressRef}
         onClick={onProgressClick}
         onKeyDown={(e) => {
-          if (e.key === 'ArrowRight') {
+          if (e.key === "ArrowRight") {
             videoRef.current.currentTime += 5;
-          } else if (e.key === 'ArrowLeft') {
+          } else if (e.key === "ArrowLeft") {
             videoRef.current.currentTime -= 5;
           }
         }}
@@ -75,7 +85,7 @@ const VideoControls = ({
           className="preview-container"
           style={{
             left: `${previewPosition.x}px`,
-            display: previewPosition.x ? 'block' : 'none'
+            display: previewPosition.x ? "block" : "none",
           }}
         >
           <canvas
@@ -103,18 +113,30 @@ const VideoControls = ({
             {playing ? <FaPause size={24} /> : <FaPlay size={24} />}
           </button>
 
-          <button className="control-button" onClick={() => onSeek(-10)} type="button">
+          <button
+            className="control-button"
+            onClick={() => onSeek(-10)}
+            type="button"
+          >
             <BiRewind size={44} />
             <span className="seek-label">-10s</span>
           </button>
 
-          <button className="control-button" onClick={() => onSeek(10)} type="button">
+          <button
+            className="control-button"
+            onClick={() => onSeek(10)}
+            type="button"
+          >
             <BiFastForward size={44} />
             <span className="seek-label">+10s</span>
           </button>
 
           <div className="volume-control">
-            <button className="control-button" onClick={onMuteToggle} type="button">
+            <button
+              className="control-button"
+              onClick={onMuteToggle}
+              type="button"
+            >
               {isMuted ? <FaVolumeMute size={24} /> : <FaVolumeUp size={24} />}
             </button>
             <input
@@ -133,7 +155,7 @@ const VideoControls = ({
         <div className="controls-right">
           <button className="control-button" onClick={onNext} type="button">
             <FaStepForward size={24} />
-            <span className="seek-label">Next</span>
+            <span className="seek-label">{t("controls.nextEpisode")}</span>
           </button>
 
           <button
@@ -160,7 +182,9 @@ const VideoControls = ({
                 {[0.5, 1, 1.25, 1.5, 2].map((speed) => (
                   <button
                     key={speed}
-                    className={`speed-option ${playbackSpeed === speed ? 'active' : ''}`}
+                    className={`speed-option ${
+                      playbackSpeed === speed ? "active" : ""
+                    }`}
                     onClick={() => onSpeedChange(speed)}
                     type="button"
                   >
@@ -170,12 +194,11 @@ const VideoControls = ({
               </div>
             )}
           </div>
-
           <button className="control-button" onClick={onFullscreen} type="button">
             {isFullscreen ?
               <RiFullscreenExitFill size={24} /> :
               <RiFullscreenFill size={24} />
-            }
+            )}
           </button>
         </div>
       </div>
@@ -198,7 +221,7 @@ VideoControls.propTypes = {
   isFullscreen: PropTypes.bool.isRequired,
   previewPosition: PropTypes.shape({
     x: PropTypes.number.isRequired,
-    time: PropTypes.number.isRequired
+    time: PropTypes.number.isRequired,
   }).isRequired,
   videoRef: PropTypes.object.isRequired,
   progressRef: PropTypes.object.isRequired,
@@ -215,7 +238,7 @@ VideoControls.propTypes = {
   onProgressClick: PropTypes.func.isRequired,
   onProgressHover: PropTypes.func.isRequired,
   onProgressLeave: PropTypes.func.isRequired,
-  formatTime: PropTypes.func.isRequired
+  formatTime: PropTypes.func.isRequired,
 };
 
-export default VideoControls; 
+export default VideoControls;

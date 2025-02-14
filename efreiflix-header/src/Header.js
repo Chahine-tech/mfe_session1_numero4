@@ -1,26 +1,24 @@
-import React from 'react';
-import styled from 'styled-components';
+import React from "react";
+import { useTranslation } from "react-i18next";
+import styled from "styled-components";
+import "./i18n";
 
 const HeaderContainer = styled.header`
-  background: linear-gradient(180deg, rgba(0,0,0,0.8) 0%, transparent 100%);
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.8) 0%, transparent 100%);
   padding: 1.5rem 4%;
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
   z-index: 1000;
   display: flex;
   justify-content: space-between;
   align-items: center;
   transition: all 0.3s ease;
-  
+
   &:hover {
-    background: rgba(0,0,0,0.9);
+    background: rgba(0, 0, 0, 0.9);
   }
 `;
 
 const Logo = styled.div`
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-weight: 700;
   font-size: 2.5rem;
   background: linear-gradient(45deg, #e50914, #eb144c);
@@ -36,16 +34,16 @@ const Nav = styled.nav`
 `;
 
 const NavLink = styled.a`
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   color: #fff;
   font-size: 1.1rem;
   font-weight: 500;
   text-decoration: none;
   transition: color 0.3s ease;
   position: relative;
-  
+
   &:after {
-    content: '';
+    content: "";
     position: absolute;
     bottom: -5px;
     left: 0;
@@ -54,10 +52,10 @@ const NavLink = styled.a`
     background: #e50914;
     transition: width 0.3s ease;
   }
-  
+
   &:hover {
     color: #e50914;
-    
+
     &:after {
       width: 100%;
     }
@@ -65,17 +63,19 @@ const NavLink = styled.a`
 `;
 
 const Header = () => {
+  const { t } = useTranslation();
+
   return (
     <HeaderContainer>
-      <Logo>EFREIFlix</Logo>
+      <Logo>{t("logo.title")}</Logo>
       <Nav>
-        <NavLink href="/accueil">Accueil</NavLink>
-        <NavLink href="/series">Séries</NavLink>
-        <NavLink href="/films">Films</NavLink>
-        <NavLink href="/nouveautes">Nouveautés</NavLink>
+        <NavLink href="/accueil">{t("navigation.home")}</NavLink>
+        <NavLink href="/series">{t("navigation.series")}</NavLink>
+        <NavLink href="/films">{t("navigation.movies")}</NavLink>
+        <NavLink href="/nouveautes">{t("navigation.newReleases")}</NavLink>
       </Nav>
     </HeaderContainer>
   );
 };
 
-export default Header; 
+export default Header;
