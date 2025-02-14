@@ -19,16 +19,12 @@ const getRemoteEntryUrl = (appName) => {
   if (process.env.NODE_ENV === 'production') {
     // Replace these URLs with your actual Vercel deployment URLs
     const urls = {
-      breadcrumbs: 'https://efrei-breadcrumbs-g1-iota.vercel.app',
-      films: 'https://efrei-films-g1-iota.vercel.app',
-      about: 'https://efrei-about-g1.vercel.app'
+      breadcrumbs: 'https://efrei-breadcrumbs-g1-iota.vercel.app'
     };
     return `${urls[appName]}/remoteEntry.js`;
   }
   const ports = {
-    breadcrumbs: 3005,
-    films: 3004,
-    about: 3003
+    breadcrumbs: 3005
   };
   return `http://localhost:${ports[appName]}/remoteEntry.js`;
 };
@@ -37,7 +33,11 @@ module.exports = {
   entry: "./src/index.js",
   mode: process.env.NODE_ENV || "development",
   output: {
-    publicPath: 'auto',
+    publicPath: process.env.NODE_ENV === 'production' 
+      ? 'https://efreinetflixclone.vercel.app/' // Update this with your shell app URL
+      : 'auto',
+    filename: '[name].[contenthash].js',
+    clean: true,
   },
   devServer: {
     port: 3000,
@@ -66,9 +66,7 @@ module.exports = {
     new ModuleFederationPlugin({
       name: "shell",
       remotes: {
-        breadcrumbs: `breadcrumbs@${getRemoteEntryUrl('breadcrumbs')}`,
-        films: `films@${getRemoteEntryUrl('films')}`,
-        about: `about@${getRemoteEntryUrl('about')}`
+        breadcrumbs: `breadcrumbs@${getRemoteEntryUrl('breadcrumbs')}`
       },
       shared: {
         react: { 
@@ -87,4 +85,7 @@ module.exports = {
       template: "./public/index.html",
     }),
   ],
+  resolve: {
+    extensions: ['.js', '.jsx', '.json'],
+  },
 }; 
