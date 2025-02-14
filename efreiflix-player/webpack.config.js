@@ -77,12 +77,12 @@ module.exports = {
     }),
     new CopyWebpackPlugin({
       patterns: [
-        { 
-          from: 'public/captions',
-          to: 'captions'
-        }
-      ]
-    })
+        {
+          from: "public/captions",
+          to: "captions",
+        },
+      ],
+    }),
   ],
   resolve: {
     extensions: [".js", ".jsx"],
