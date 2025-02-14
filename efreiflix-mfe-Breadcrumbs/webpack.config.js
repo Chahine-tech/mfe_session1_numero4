@@ -2,6 +2,7 @@ const ModuleFederationPlugin = require('webpack/lib/container/ModuleFederationPl
 const path = require('path');
 const { dependencies } = require('./package.json');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+//const BasicBreadcrumbs = require("./src/Breadcrumbs");
 
 module.exports = {
   entry: './src/index.js',
@@ -41,10 +42,10 @@ module.exports = {
   },
   plugins: [
     new ModuleFederationPlugin({
-      name: 'skeleton',
+      name: 'Breadcrumbs',
       filename: 'remoteEntry.js',
       exposes: {
-        './Skeleton': './src/Skeleton',
+        './Breadcrumbs': './src/Breadcrumbs',
       },
       shared: {
         react: {
