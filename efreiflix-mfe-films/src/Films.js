@@ -5,15 +5,37 @@ const Films = () => {
     const [movies, setMovies] = useState([]);
 
     useEffect(() => {
-        fetch("http://localhost:2066/movies")
-            .then((response) => response.json()) // Convertit en JSON
-            .then((data) => {
-                console.log("Films récupérés :", data); // Affiche les films dans la console
-                setMovies(data); // Met à jour l'état avec les films
-            })
-            .catch((error) =>
-                console.error("Erreur lors du chargement des films :", error)
-            );
+        // fetch("http://localhost:2066/movies")
+        //     .then((response) => response.json()) // Convertit en JSON
+        //     .then((data) => {
+        //         console.log("Films récupérés :", data); // Affiche les films dans la console
+        //         setMovies(data); // Met à jour l'état avec les films
+        //     })
+        //     .catch((error) =>
+        //         console.error("Erreur lors du chargement des films :", error)
+        //     );
+
+        // Mock data
+        setMovies([
+            {
+                id: 1,
+                title: "Inception",
+                year: 2010,
+                genres: ["Science Fiction", "Action", "Thriller"],
+                description: "Dom Cobb est un voleur expérimenté dans l'art périlleux de `l'extraction` : sa spécialité consiste à s'approprier les secrets les plus précieux d'un individu pendant qu'il rêve.",
+                rating: 4.8,
+                trailerUrl: "https://www.youtube.com/watch?v=YoHD9XEInc0"
+            },
+            {
+                id: 2, 
+                title: "The Dark Knight",
+                year: 2008,
+                genres: ["Action", "Drame", "Crime"],
+                description: "Batman entreprend de démanteler les organisations criminelles qui pullulent à Gotham. Mais il se heurte bientôt à un nouveau génie du crime qui répand la terreur et le chaos dans la ville : le Joker.",
+                rating: 4.9,
+                trailerUrl: "https://www.youtube.com/watch?v=EXeTwQWrcwY"
+            }
+        ]);
     }, []);
 
     return (
