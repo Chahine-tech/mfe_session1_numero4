@@ -14,6 +14,7 @@
 
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const { ModuleFederationPlugin } = require("webpack").container;
+const path = require('path');
 
 const getRemoteEntryUrl = (appName) => {
   if (process.env.NODE_ENV === 'production') {
@@ -33,9 +34,8 @@ module.exports = {
   entry: "./src/index.js",
   mode: process.env.NODE_ENV || "development",
   output: {
-    publicPath: process.env.NODE_ENV === 'production' 
-      ? 'https://efreinetflixclone.vercel.app/' // Update this with your shell app URL
-      : 'auto',
+    path: path.resolve(__dirname, 'dist'),
+    publicPath: '/',
     filename: '[name].[contenthash].js',
     clean: true,
   },
