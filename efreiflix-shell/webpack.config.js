@@ -19,14 +19,14 @@ const getRemoteEntryUrl = (appName) => {
   if (process.env.NODE_ENV === 'production') {
     // Replace these URLs with your actual Vercel deployment URLs
     const urls = {
-      breadcrumb: 'https://efrei-breadcrumbs-g1-iota.vercel.app',
+      breadcrumbs: 'https://efrei-breadcrumbs-g1-iota.vercel.app',
       films: 'https://efrei-films-g1-iota.vercel.app',
       about: 'https://efrei-about-g1.vercel.app'
     };
     return `${urls[appName]}/remoteEntry.js`;
   }
   const ports = {
-    breadcrumb: 3005,
+    breadcrumbs: 3005,
     films: 3004,
     about: 3003
   };
@@ -66,7 +66,7 @@ module.exports = {
     new ModuleFederationPlugin({
       name: "shell",
       remotes: {
-        breadcrumb: `breadcrumb@${getRemoteEntryUrl('breadcrumb')}`,
+        breadcrumbs: `breadcrumbs@${getRemoteEntryUrl('breadcrumbs')}`,
         films: `films@${getRemoteEntryUrl('films')}`,
         about: `about@${getRemoteEntryUrl('about')}`
       },
