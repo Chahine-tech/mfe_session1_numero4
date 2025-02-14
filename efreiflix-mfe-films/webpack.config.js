@@ -8,7 +8,7 @@ module.exports = {
     output: {
         filename: "bundle.js",
         path: path.resolve(__dirname, "dist"),
-        publicPath: "http://localhost:3004/", // Different port from header MFE
+        publicPath: "http://mfe-films.vercel.app", // Different port from header MFE
     },
     devServer: {
         port: 3004,
