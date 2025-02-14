@@ -9,10 +9,10 @@ module.exports = {
   output: {
     filename: 'bundle.js',
     path: path.resolve(__dirname, 'dist'),
-    publicPath: 'http://localhost:3002/', // Nouveau port pour le player
+    publicPath: 'http://localhost:3004/', // Nouveau port pour le player
   },
   devServer: {
-    port: 3002,
+    port: 3004,
     static: {
       directory: path.join(__dirname, 'public'),
     },
