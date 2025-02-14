@@ -89,6 +89,46 @@ const ItemsGrid = styled.div`
   margin-bottom: 4rem;
 `;
 
+// Add this sample data (you can move it to a separate file later)
+const sampleContent = [
+  {
+    id: 1,
+    title: "Stranger Things",
+    description:
+      "Une série de science-fiction mystérieuse qui suit les aventures d'un groupe d'enfants dans les années 80.",
+  },
+  {
+    id: 2,
+    title: "The Crown",
+    description:
+      "Un drame historique sur la vie de la reine Elizabeth II et les événements qui ont façonné le 20e siècle.",
+  },
+  {
+    id: 3,
+    title: "Breaking Bad",
+    description:
+      "L'histoire d'un professeur de chimie qui se tourne vers la fabrication de méthamphétamine après un diagnostic de cancer.",
+  },
+  {
+    id: 4,
+    title: "The Witcher",
+    description:
+      "Un chasseur de monstres aux pouvoirs surnaturels lutte pour trouver sa place dans un monde où les humains sont souvent plus méchants que les bêtes.",
+  },
+  {
+    id: 5,
+    title: "Black Mirror",
+    description:
+      "Une série d'anthologie qui explore un futur proche où les innovations technologiques ont des conséquences inattendues.",
+  },
+  {
+    id: 6,
+    title: "La Casa de Papel",
+    description:
+      "Un groupe de braqueurs exceptionnels attaque la Fabrique nationale de la monnaie et du timbre.",
+  },
+];
+
 const App = () => {
   const [isPlayerLoaded, setIsPlayerLoaded] = useState(false);
 
@@ -117,16 +157,18 @@ const App = () => {
 
           <SectionTitle>Tendances actuelles</SectionTitle>
           <ItemsGrid>
-            {[...Array(6)].map((_, i) => (
+            {sampleContent.map((content, i) => (
               <Suspense
-                key={i}
+                key={content.id}
                 fallback={
                   <div style={{ height: 330, background: "#1a1a1a" }}></div>
                 }
               >
                 <ItemCard
                   imageSrc={`https://picsum.photos/300/450?random=${i}`}
-                  alt="Content placeholder"
+                  alt={content.title}
+                  title={content.title}
+                  description={content.description}
                   onClick={() => setIsPlayerLoaded(true)}
                 />
               </Suspense>
@@ -135,16 +177,18 @@ const App = () => {
 
           <SectionTitle>Séries populaires</SectionTitle>
           <ItemsGrid>
-            {[...Array(6)].map((_, i) => (
+            {sampleContent.map((content, i) => (
               <Suspense
-                key={i}
+                key={content.id}
                 fallback={
                   <div style={{ height: 330, background: "#1a1a1a" }}></div>
                 }
               >
                 <ItemCard
                   imageSrc={`https://picsum.photos/300/450?random=${i + 10}`}
-                  alt="Content placeholder"
+                  alt={content.title}
+                  title={content.title}
+                  description={content.description}
                   onClick={() => setIsPlayerLoaded(true)}
                 />
               </Suspense>

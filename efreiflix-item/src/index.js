@@ -13,6 +13,8 @@ const mount = () => {
     <ItemCard
       imageSrc="https://picsum.photos/300/450"
       alt="Demo"
+      title="Stranger Things"
+      description="Une série de science-fiction mystérieuse qui suit les aventures d'un groupe d'enfants dans les années 80."
       onClick={() => console.log("clicked")}
     />,
   );
