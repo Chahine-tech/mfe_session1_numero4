@@ -1,85 +1,80 @@
-/**
- * Configuration Webpack pour le micro-frontend Header
- *
- * Ce fichier configure un micro-frontend qui sera consommé par l'application Shell.
- * Il expose un composant Header qui pourra être importé dynamiquement.
- *
- * Points clés :
- * - Exposition du composant via Module Federation
- * - Configuration du port de développement standalone
- * - Gestion des dépendances partagées avec le Shell
- * - Support du développement indépendant
- */
-
-const ModuleFederationPlugin = require("webpack/lib/container/ModuleFederationPlugin");
-const path = require("path");
-const { dependencies } = require("./package.json");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+const { ModuleFederationPlugin } = require("webpack").container;
 
+const isProd = process.env.NODE_ENV === 'production';
+const prodUrl = 'https://efrei-about-g1.vercel.app/';
+const getRemoteEntryUrl = (appName) => {
+  if (process.env.NODE_ENV === 'production') {
+    // Replace these URLs with your actual Vercel deployment URLs
+    const urls = {
+        ficheProduit: 'https://efrei-about-g1.vercel.app'
+    };
+    return `${urls[appName]}/remoteEntry.js`;
+  }
+  const ports = {
+    header: 3001,
+    skeleton: 3002
+  };
+  return `http://localhost:${ports[appName]}/remoteEntry.js`;
+};
 module.exports = {
   entry: "./src/index.js",
+  mode: process.env.NODE_ENV || "development",
   output: {
-    filename: "bundle.js",
-    path: path.resolve(__dirname, "dist"),
-    publicPath: "http://localhost:3005/", // URL publique de base pour les assets (IMPORTANT pour Module Federation)
+    publicPath: isProd ? prodUrl : 'auto',
+    filename: '[name].[contenthash].js'
   },
   devServer: {
-    port: 3005, // Port du serveur de développement (IMPORTANT : doit être unique pour chaque MFE)
-    static: {
-      directory: path.join(__dirname, "public"),
-    },
+    port: 3003,
+    hot: true,
     headers: {
-      // Configuration des en-têtes CORS (Cross-Origin Resource Sharing)
-      "Access-Control-Allow-Origin": "*", // Autoriser toutes les origines (pour le développement)
+      "Access-Control-Allow-Origin": "*",
       "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, PATCH, OPTIONS",
-      "Access-Control-Allow-Headers":
-        "X-Requested-With, content-type, Authorization",
+      "Access-Control-Allow-Headers": "X-Requested-With, content-type, Authorization"
     },
+    historyApiFallback: true,
   },
   module: {
     rules: [
       {
-        test: /\.(js|jsx)$/,
+        test: /\.jsx?$/,
+        loader: "babel-loader",
         exclude: /node_modules/,
-        use: {
-          loader: "babel-loader",
-          options: {
-            presets: ["@babel/preset-react", "@babel/preset-env"],
-          },
+        options: {
+          presets: ["@babel/preset-react"],
         },
       },
       {
         test: /\.css$/,
-        use: ["style-loader", "css-loader", "postcss-loader"],
+        use: ['style-loader', 'css-loader', 'postcss-loader'],
       },
     ],
   },
   plugins: [
     new ModuleFederationPlugin({
-      name: "about", // Nom UNIQUE du Micro Frontend (utilisé par le Shell pour l'importer)
-      filename: "remoteEntry.js", // Nom du fichier d'entrée exposé (conventionnel)
+      name: "about",
+      filename: "remoteEntry.js",
       exposes: {
-        "./About": "./src/About", // Expose le composant Header (chemin relatif)
+        "./About": "./src/About",
+      },
+      remotes: {
+        ficheProduit: `ficheProduit@${getRemoteEntryUrl('ficheProduit')}`,
       },
       shared: {
-        // Configuration des dépendances partagées
-        react: {
+        react: { 
           singleton: true,
-          requiredVersion: dependencies.react,
-          eager: true, // Ajout de eager pour le chargement
+          requiredVersion: false,
+          eager: true
         },
-        "react-dom": {
+        "react-dom": { 
           singleton: true,
-          requiredVersion: dependencies["react-dom"],
-          eager: true, // Ajout de eager pour le chargement
-        },
+          requiredVersion: false,
+          eager: true
+        }
       },
     }),
     new HtmlWebpackPlugin({
       template: "./public/index.html",
     }),
   ],
-  resolve: {
-    extensions: [".js", ".jsx"],
-  },
-};
+}; 
