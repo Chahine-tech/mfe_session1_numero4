@@ -15,12 +15,36 @@
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const { ModuleFederationPlugin } = require("webpack").container;
 
+const getRemoteEntryUrl = (appName) => {
+  if (process.env.NODE_ENV === 'production') {
+    // Replace these URLs with your actual Vercel deployment URLs
+    const urls = {
+      breadcrumb: 'https://efrei-breadcrumbs-g1-iota.vercel.app',
+      films: 'https://efrei-films-g1-iota.vercel.app',
+      about: 'https://efrei-about-g1.vercel.app'
+    };
+    return `${urls[appName]}/remoteEntry.js`;
+  }
+  const ports = {
+    breadcrumb: 3005,
+    films: 3004,
+    about: 3003
+  };
+  return `http://localhost:${ports[appName]}/remoteEntry.js`;
+};
+
 module.exports = {
   entry: "./src/index.js",
-  mode: "development",
+  mode: process.env.NODE_ENV || "development",
+  output: {
+    publicPath: 'auto',
+  },
   devServer: {
-    port: 3000, // Port distinct du micro-frontend Header (3001)
-    hot: true,  // Activation du Hot Module Replacement
+    port: 3000,
+    hot: true,
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+    },
   },
   module: {
     rules: [
@@ -29,28 +53,28 @@ module.exports = {
         loader: "babel-loader",
         exclude: /node_modules/,
         options: {
-          presets: ["@babel/preset-react"], // Configuration Babel pour React
+          presets: ["@babel/preset-react"],
         },
       },
+      {
+        test: /\.css$/,
+        use: ['style-loader', 'css-loader']
+      }
     ],
   },
   plugins: [
-    // Configuration Module Federation pour l'application hôte
     new ModuleFederationPlugin({
-      name: "shell", // Nom unique de l'application
+      name: "shell",
       remotes: {
-        // Déclaration du micro-frontend Header
-        // Format: "nom_remote@url/fichier_entree.js"
-        header: 'header@http://localhost:3001/remoteEntry.js', // Configuration pour consommer le MFE 'header'
-        skeleton: 'skeleton@http://localhost:3002/remoteEntry.js'
+        breadcrumb: `breadcrumb@${getRemoteEntryUrl('breadcrumb')}`,
+        films: `films@${getRemoteEntryUrl('films')}`,
+        about: `about@${getRemoteEntryUrl('about')}`
       },
-
       shared: {
-        // Configuration du partage des dépendances
         react: { 
-          singleton: true,     // Une seule instance de React
-          requiredVersion: false, // Pas de vérification stricte des versions
-          eager: true         // Chargement immédiat pour l'app host
+          singleton: true,
+          requiredVersion: false,
+          eager: true
         },
         "react-dom": { 
           singleton: true,
@@ -59,7 +83,6 @@ module.exports = {
         }
       },
     }),
-    // Génération du HTML avec le point d'entrée
     new HtmlWebpackPlugin({
       template: "./public/index.html",
     }),
