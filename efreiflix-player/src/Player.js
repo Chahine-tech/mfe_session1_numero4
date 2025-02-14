@@ -304,6 +304,17 @@ const Player = ({
     }
   }, []);
 
+  // Add effect to manage scroll behavior
+  useEffect(() => {
+    // Disable scroll when component mounts
+    document.body.classList.add('player-active');
+
+    // Re-enable scroll when component unmounts
+    return () => {
+      document.body.classList.remove('player-active');
+    };
+  }, []);
+
   return (
     <div 
       ref={containerRef}
