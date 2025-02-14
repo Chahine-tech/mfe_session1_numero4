@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { FaArrowLeft } from 'react-icons/fa';
 import PropTypes from 'prop-types';
 import VideoControls from './components/VideoControls';
@@ -40,7 +40,17 @@ const Player = ({
   // Get unique seasons from episodes list
   const seasons = [...new Set(episodesList.map(episode => episode.season))];
 
-  const handlePlayPause = () => {
+  const startInactivityTimer = () => {
+    clearInactivityTimer();
+    inactivityTimeout = setTimeout(() => {
+      setShowControls(false);
+      setIsMouseActive(false);
+      setShowDescription(true);
+    }, 3000);
+  };
+
+  // biome-ignore lint/correctness/useExhaustiveDependencies: avoid infinite loop
+  const handlePlayPause = useCallback(() => {
     if (videoRef.current) {
       if (playing) {
         videoRef.current.pause();
@@ -48,17 +58,10 @@ const Player = ({
         setShowControls(true);
       } else {
         videoRef.current.play();
-        clearInactivityTimer();
-        if (controlsTimeoutRef.current) {
-          clearTimeout(controlsTimeoutRef.current);
-        }
-        controlsTimeoutRef.current = setTimeout(() => {
-          setShowControls(false);
-        }, 3000);
       }
       setPlaying(!playing);
     }
-  };
+  }, [playing]);
 
   const handleSeek = (seconds) => {
     if (videoRef.current) {
@@ -254,13 +257,6 @@ const Player = ({
     };
   }, []);
 
-  const startInactivityTimer = () => {
-    clearInactivityTimer();
-    inactivityTimeout = setTimeout(() => {
-      setShowDescription(true);
-    }, 3000);
-  };
-
   const clearInactivityTimer = () => {
     if (inactivityTimeout) {
       clearTimeout(inactivityTimeout);
@@ -278,6 +274,20 @@ const Player = ({
       }
     };
   }, []);
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === ' ' || e.code === 'Space') {
+        e.preventDefault(); // Prevent default tab behavior
+        handlePlayPause();
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [handlePlayPause]);
 
   return (
     <div 
