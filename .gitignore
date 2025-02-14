@@ -1,8 +1,0 @@
-.history/
-node_modules/
-.env
-.DS_Store
-dist/
-coverage/
-.vscode/
-*.log
