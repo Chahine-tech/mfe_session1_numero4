@@ -2,7 +2,7 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const { ModuleFederationPlugin } = require("webpack").container;
 
 const isProd = process.env.NODE_ENV === 'production';
-const prodUrl = 'https://efrei-films-g1.vercel.app/';
+const prodUrl = 'https://efrei-films-g1-iota.vercel.app/';
 
 module.exports = {
   entry: "./src/index.js",
