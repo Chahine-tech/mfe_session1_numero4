@@ -1,4 +1,4 @@
-import React, { Suspense, useState } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 import styled, { createGlobalStyle } from "styled-components";
 
 const Header = React.lazy(() => import("header/Header"));
@@ -131,6 +131,23 @@ const sampleContent = [
 
 const App = () => {
   const [isPlayerLoaded, setIsPlayerLoaded] = useState(false);
+
+  // Add useEffect for escape key handling
+  useEffect(() => {
+    const handleEscape = (event) => {
+      if (event.key === "Escape" && isPlayerLoaded) {
+        setIsPlayerLoaded(false);
+      }
+    };
+
+    // Add event listener when component mounts
+    document.addEventListener("keydown", handleEscape);
+
+    // Cleanup event listener when component unmounts
+    return () => {
+      document.removeEventListener("keydown", handleEscape);
+    };
+  }, [isPlayerLoaded]); // Only re-run effect if isPlayerLoaded changes
 
   return (
     <>
