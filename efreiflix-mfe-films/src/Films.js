@@ -23,14 +23,46 @@ const Films = () => {
                 {movies.length === 0 ? (
                     <p className="text-gray-700">Chargement des films...</p>
                 ) : (
-                    <ul className="space-y-2">
-                        {movies.map((movie, index) => (
-                            <li
-                                key={index}
-                                className="p-3 bg-gray-100 rounded-md shadow-sm"
+                    <ul className="space-y-6">
+                        {movies.map((movie) => (
+                            <div
+                                key={movie.id}
+                                className=" bg-slate-200 shadow-lg rounded-lg overflow-hidden transform transition duration-50 hover:shadow-2xl hover:cursor-pointer hover:bg-slate-300"
                             >
-                                🎬 {movie.title} ({movie.year})
-                            </li>
+                                <h2 className="text-xl font-bold text-gray-900">
+                                    🎬 {movie.title}
+                                </h2>
+                                <p className="text-sm text-gray-500">
+                                    {movie.year}
+                                </p>
+                                {/* Genres */}
+                                <p className="mt-2 text-sm text-gray-700">
+                                    <strong>Genres :</strong>{" "}
+                                    {movie.genres.join(", ")}
+                                </p>
+
+                                {/* Description */}
+                                <p className="mt-2 text-gray-700 text-sm line-clamp-3">
+                                    {movie.description}
+                                </p>
+
+                                {/* Note */}
+                                <div className="mt-3 flex items-center">
+                                    <span className="text-yellow-500 text-lg font-bold">
+                                        ⭐ {movie.rating}/5
+                                    </span>
+                                </div>
+
+                                {/* Bouton Voir Bande-annonce */}
+                                <a
+                                    href={movie.trailerUrl}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="mt-4 block text-center bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 rounded-md transition"
+                                >
+                                    ▶️ Voir la bande-annonce
+                                </a>
+                            </div>
                         ))}
                     </ul>
                 )}
