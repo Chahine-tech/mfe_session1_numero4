@@ -13,6 +13,9 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
+import MenuItem from '@mui/material/MenuItem';
+import Select from '@mui/material/Select';
+import { useState, useEffect } from 'react';
 
 function DynamicBreadcrumbs() {
     const location = useLocation();
@@ -36,6 +39,36 @@ function DynamicBreadcrumbs() {
                 );
             })}
         </Breadcrumbs>
+    );
+}
+
+function GenreDropdown() {
+    const [genres, setGenres] = useState([]);
+    const [selectedGenre, setSelectedGenre] = useState('');
+
+    useEffect(() => {
+        fetch(' http://0.0.0.0:2066/movies')
+            .then((response) => response.json())
+            .then((data) => {
+                const allGenres = [...new Set(data.flatMap(movie => movie.genres))];
+                setGenres(allGenres);
+            });
+    }, []);
+
+    const handleChange = (event) => {
+        setSelectedGenre(event.target.value);
+    };
+
+    return (
+        <Box sx={{ margin: '20px', width: '300px' }}>
+            <Typography variant="h6">Choisir un genre :</Typography>
+            <Select fullWidth value={selectedGenre} onChange={handleChange} displayEmpty>
+                <MenuItem value=""><em>Tout</em></MenuItem>
+                {genres.map((genre, index) => (
+                    <MenuItem key={index} value={genre}>{genre}</MenuItem>
+                ))}
+            </Select>
+        </Box>
     );
 }
 
@@ -66,6 +99,7 @@ export default function NetflixNavBar() {
             </AppBar>
             <Box sx={{ p: 2 }}>
                 <DynamicBreadcrumbs />
+                <GenreDropdown />
             </Box>
         </Router>
     );
