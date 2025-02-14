@@ -30,7 +30,7 @@ const NavLink = styled(Link)`
 const App = () => {
   return (
     <Router>
-      {/* <Container>
+      <Container>
         <Nav>
           <NavLink to="/cgu">Conditions Générales d'Utilisation</NavLink>
           <NavLink to="/cgv">Conditions Générales de Vente</NavLink>
@@ -41,7 +41,7 @@ const App = () => {
           <Route path="/cgv" element={<CGV />} />
           <Route path="/" element={<CGU />} />
         </Routes>
-      </Container> */}
+      </Container>
     </Router>
   );
 };
