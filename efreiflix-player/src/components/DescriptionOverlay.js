@@ -9,7 +9,7 @@ const DescriptionOverlay = ({
   description
 }) => {
   return show ? (
-    <aside 
+    <aside
       className="description-overlay"
       aria-label="Episode description"
     >

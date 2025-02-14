@@ -33,8 +33,8 @@ const EpisodesModal = ({
               ))}
             </div>
           </div>
-          <button 
-            className="close-modal" 
+          <button
+            className="close-modal"
             onClick={onClose}
             type="button"
           >
@@ -43,7 +43,7 @@ const EpisodesModal = ({
         </div>
         <div className="episodes-list">
           {filteredEpisodes.map((episode) => (
-            <button 
+            <button
               key={episode.id}
               className="episode-item"
               onClick={() => onEpisodeClick(episode)}
@@ -55,9 +55,9 @@ const EpisodesModal = ({
               type="button"
             >
               <div className="episode-thumbnail-container">
-                <img 
-                  src={episode.thumbnail} 
-                  alt={episode.title} 
+                <img
+                  src={episode.thumbnail}
+                  alt={episode.title}
                   className="episode-thumbnail"
                 />
                 <div className="thumbnail-overlay">

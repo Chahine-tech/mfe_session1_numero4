@@ -48,7 +48,7 @@ const VideoControls = ({
 
   return (
     <div
-      className={`controls-overlay ${showControls ? "visible" : ""}`}
+      className={`controls-overlay ${showControls ? 'visible' : ''}`}
       role="toolbar"
       aria-label="Video controls"
     >
@@ -194,15 +194,9 @@ const VideoControls = ({
               </div>
             )}
           </div>
-
-          <button
-            className="control-button"
-            onClick={onFullscreen}
-            type="button"
-          >
-            {isFullscreen ? (
-              <RiFullscreenExitFill size={24} />
-            ) : (
+          <button className="control-button" onClick={onFullscreen} type="button">
+            {isFullscreen ?
+              <RiFullscreenExitFill size={24} /> :
               <RiFullscreenFill size={24} />
             )}
           </button>
