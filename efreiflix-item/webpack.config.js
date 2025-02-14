@@ -40,6 +40,9 @@ module.exports = {
     new ModuleFederationPlugin({
       name: "item",
       filename: "remoteEntry.js",
+      remotes: {
+        shell: "shell@http://localhost:3000/remoteEntry.js",
+      },
       exposes: {
         "./ItemCard": "./src/ItemCard",
       },

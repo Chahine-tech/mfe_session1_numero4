@@ -1,5 +1,7 @@
 import React, { Suspense, useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import styled, { createGlobalStyle } from "styled-components";
+import "./i18n";
 
 const Header = React.lazy(() => import("header/Header"));
 const Player = React.lazy(() => import("player/Player"));
@@ -41,7 +43,6 @@ const MainContainer = styled.div`
 const ContentArea = styled.main`
   flex: 1;
   padding: 4% 4% 0;
-  margin-top: 80px; // Hauteur du header
 `;
 
 const HeroSection = styled.div`
@@ -89,48 +90,43 @@ const ItemsGrid = styled.div`
   margin-bottom: 4rem;
 `;
 
-// Add this sample data (you can move it to a separate file later)
-const sampleContent = [
-  {
-    id: 1,
-    title: "Stranger Things",
-    description:
-      "Une série de science-fiction mystérieuse qui suit les aventures d'un groupe d'enfants dans les années 80.",
-  },
-  {
-    id: 2,
-    title: "The Crown",
-    description:
-      "Un drame historique sur la vie de la reine Elizabeth II et les événements qui ont façonné le 20e siècle.",
-  },
-  {
-    id: 3,
-    title: "Breaking Bad",
-    description:
-      "L'histoire d'un professeur de chimie qui se tourne vers la fabrication de méthamphétamine après un diagnostic de cancer.",
-  },
-  {
-    id: 4,
-    title: "The Witcher",
-    description:
-      "Un chasseur de monstres aux pouvoirs surnaturels lutte pour trouver sa place dans un monde où les humains sont souvent plus méchants que les bêtes.",
-  },
-  {
-    id: 5,
-    title: "Black Mirror",
-    description:
-      "Une série d'anthologie qui explore un futur proche où les innovations technologiques ont des conséquences inattendues.",
-  },
-  {
-    id: 6,
-    title: "La Casa de Papel",
-    description:
-      "Un groupe de braqueurs exceptionnels attaque la Fabrique nationale de la monnaie et du timbre.",
-  },
-];
-
 const App = () => {
   const [isPlayerLoaded, setIsPlayerLoaded] = useState(false);
+  const { t } = useTranslation();
+
+  // Create the content array using translations
+  const sampleContent = [
+    {
+      id: 1,
+      title: t("movies.strangerThings.title"),
+      description: t("movies.strangerThings.description"),
+    },
+    {
+      id: 2,
+      title: t("movies.theCrown.title"),
+      description: t("movies.theCrown.description"),
+    },
+    {
+      id: 3,
+      title: t("movies.breakingBad.title"),
+      description: t("movies.breakingBad.description"),
+    },
+    {
+      id: 4,
+      title: t("movies.theWitcher.title"),
+      description: t("movies.theWitcher.description"),
+    },
+    {
+      id: 5,
+      title: t("movies.blackMirror.title"),
+      description: t("movies.blackMirror.description"),
+    },
+    {
+      id: 6,
+      title: t("movies.casaDePapel.title"),
+      description: t("movies.casaDePapel.description"),
+    },
+  ];
 
   // Add useEffect for escape key handling
   useEffect(() => {
@@ -153,85 +149,64 @@ const App = () => {
     <>
       <GlobalStyle />
       <MainContainer>
-        <Suspense
-          fallback={
-            <div style={{ color: "white", padding: "1rem" }}>
-              Chargement du header...
-            </div>
-          }
-        >
+        <Suspense fallback={<div>{t("loading.header")}</div>}>
           <Header />
         </Suspense>
 
-        <ContentArea>
-          <HeroSection>
-            <h2>Bienvenue sur EFREIFlix</h2>
-            <p>
-              Des milliers de films, séries et documentaires à découvrir.
-              Regardez où vous voulez. Annulez quand vous voulez.
-            </p>
-          </HeroSection>
-
-          <SectionTitle>Tendances actuelles</SectionTitle>
-          <ItemsGrid>
-            {sampleContent.map((content, i) => (
-              <Suspense
-                key={content.id}
-                fallback={
-                  <div style={{ height: 330, background: "#1a1a1a" }}></div>
-                }
-              >
-                <ItemCard
-                  imageSrc={`https://picsum.photos/300/450?random=${i}`}
-                  alt={content.title}
-                  title={content.title}
-                  description={content.description}
-                  onClick={() => setIsPlayerLoaded(true)}
-                />
-              </Suspense>
-            ))}
-          </ItemsGrid>
-
-          <SectionTitle>Séries populaires</SectionTitle>
-          <ItemsGrid>
-            {sampleContent.map((content, i) => (
-              <Suspense
-                key={content.id}
-                fallback={
-                  <div style={{ height: 330, background: "#1a1a1a" }}></div>
-                }
-              >
-                <ItemCard
-                  imageSrc={`https://picsum.photos/300/450?random=${i + 10}`}
-                  alt={content.title}
-                  title={content.title}
-                  description={content.description}
-                  onClick={() => setIsPlayerLoaded(true)}
-                />
-              </Suspense>
-            ))}
-          </ItemsGrid>
-        </ContentArea>
-
-        {isPlayerLoaded && (
-          <Suspense
-            fallback={
-              <div style={{ color: "white", padding: "1rem" }}>
-                Chargement du lecteur vidéo...
-              </div>
-            }
-          >
-            <Player onClose={() => setIsPlayerLoaded(false)} />
+        {isPlayerLoaded ? (
+          <Suspense fallback={<div>{t("loading.player")}</div>}>
+            <Player />
           </Suspense>
+        ) : (
+          <ContentArea>
+            <HeroSection>
+              <h2>{t("welcome.title")}</h2>
+              <p>{t("welcome.description")}</p>
+            </HeroSection>
+
+            <SectionTitle>{t("sections.trending")}</SectionTitle>
+            <ItemsGrid>
+              {sampleContent.map((content, i) => (
+                <Suspense
+                  key={content.id}
+                  fallback={
+                    <div style={{ height: 330, background: "#1a1a1a" }}></div>
+                  }
+                >
+                  <ItemCard
+                    imageSrc={`https://picsum.photos/300/450?random=${i}`}
+                    alt={content.title}
+                    title={content.title}
+                    description={content.description}
+                    onClick={() => setIsPlayerLoaded(true)}
+                  />
+                </Suspense>
+              ))}
+            </ItemsGrid>
+
+            <SectionTitle>{t("sections.popularSeries")}</SectionTitle>
+            <ItemsGrid>
+              {sampleContent.map((content, i) => (
+                <Suspense
+                  key={content.id}
+                  fallback={
+                    <div style={{ height: 330, background: "#1a1a1a" }}></div>
+                  }
+                >
+                  <ItemCard
+                    imageSrc={`https://picsum.photos/300/450?random=${i + 10}`}
+                    alt={content.title}
+                    title={content.title}
+                    description={content.description}
+                    onClick={() => setIsPlayerLoaded(true)}
+                  />
+                </Suspense>
+              ))}
+            </ItemsGrid>
+          </ContentArea>
         )}
 
-        <Suspense
-          fallback={
-            <div style={{ color: "white", padding: "1rem" }}>
-              Chargement du footer...
-            </div>
-          }
-        >
+        <Suspense fallback={<div>{t("loading.footer")}</div>}>
           <Footer />
         </Suspense>
       </MainContainer>

@@ -38,6 +38,9 @@ module.exports = {
     // Configuration Module Federation pour l'application hôte
     new ModuleFederationPlugin({
       name: "shell", // Nom unique de l'application
+      exposes: {
+        "./i18nConfig": "./src/i18n/config.js",
+      },
       remotes: {
         // Déclaration du micro-frontend Header
         // Format: "nom_remote@url/fichier_entree.js"
