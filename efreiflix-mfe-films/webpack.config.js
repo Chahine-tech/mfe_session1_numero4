@@ -12,7 +12,7 @@ module.exports = {
     filename: '[name].[contenthash].js'
   },
   devServer: {
-    port: 3003,
+    port: 3004,
     hot: true,
     headers: {
       "Access-Control-Allow-Origin": "*",
