@@ -37,7 +37,7 @@ const VideoControls = ({
   formatTime
 }) => {
   return (
-    <div 
+    <div
       className={`controls-overlay ${showControls ? 'visible' : ''}`}
       role="toolbar"
       aria-label="Video controls"
@@ -47,7 +47,7 @@ const VideoControls = ({
         <span className="episode-number">{subTitle}</span>
       </div>
 
-      <div 
+      <div
         className="progress-container"
         ref={progressRef}
         onClick={onProgressClick}
@@ -71,14 +71,14 @@ const VideoControls = ({
           <div className="progress-buffer" style={{ width: `${buffered}%` }} />
           <div className="progress" style={{ width: `${progress}%` }} />
         </div>
-        <div 
+        <div
           className="preview-container"
-          style={{ 
+          style={{
             left: `${previewPosition.x}px`,
             display: previewPosition.x ? 'block' : 'none'
           }}
         >
-          <canvas 
+          <canvas
             ref={previewRef}
             width="160"
             height="90"
@@ -95,8 +95,8 @@ const VideoControls = ({
 
       <div className="controls-buttons">
         <div className="controls-left">
-          <button 
-            className="control-button" 
+          <button
+            className="control-button"
             onClick={onPlayPause}
             type="button"
           >
@@ -136,8 +136,8 @@ const VideoControls = ({
             <span className="seek-label">Next</span>
           </button>
 
-          <button 
-            className="control-button" 
+          <button
+            className="control-button"
             onClick={onShowEpisodes}
             type="button"
             aria-label="Show episodes list"
@@ -147,8 +147,8 @@ const VideoControls = ({
           </button>
 
           <div className="speed-control">
-            <button 
-              className="control-button" 
+            <button
+              className="control-button"
               onClick={onToggleSpeedMenu}
               type="button"
             >
@@ -172,8 +172,8 @@ const VideoControls = ({
           </div>
 
           <button className="control-button" onClick={onFullscreen} type="button">
-            {isFullscreen ? 
-              <RiFullscreenExitFill size={24} /> : 
+            {isFullscreen ?
+              <RiFullscreenExitFill size={24} /> :
               <RiFullscreenFill size={24} />
             }
           </button>
