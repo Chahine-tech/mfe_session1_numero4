@@ -85,18 +85,48 @@
     {
       "id": 1,
       "name": "Alice",
-      "profilePicUrl": "https://example.com/profiles/alice.jpg",
       "bio": "Étudiante passionnée de ciné",
-      "watchlist": [2, 4],
-      "favorites": [1]
+      "email": "Alice@1.net",
+       "profiles": [
+        {
+          "id": 1,
+          "name": "Alice",
+          "child": false,
+          "email": "",
+          "avatar": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/31152e75-8fca-497f-bef6-aa065dd7cb67/original=true,quality=90/8A28H215PTYKEQ64TD8EEK2MV0.jpeg",
+          "lang": "fr",
+          "watchlist": [2, 4],
+          "favorites": [1]
+        },
+        {
+          "id": 2,
+          "name": "Pierre",
+          "child": true,
+          "email": "",
+          "avatar": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/3cd5e7b7-47fe-470a-b1df-356c700f0c4e/anim=false,width=450/54947162.jpeg",
+          "lang": "fr",
+          "watchlist": [],
+          "favorites": []
+        }
+      ]
     },
     {
       "id": 2,
       "name": "Bob",
-      "profilePicUrl": "https://example.com/profiles/bob.jpg",
       "bio": "Développeur & grand cinéphile",
-      "watchlist": [1, 5],
-      "favorites": []
+      "email": "bob@2.net",
+      "profiles": [
+        {
+          "id": 1,
+          "name": "Bob",
+          "child": false,
+          "email": "",
+          "avatar": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/31152e75-8fca-497f-bef6-aa065dd7cb67/original=true,quality=90/8A28H215PTYKEQ64TD8EEK2MV0.jpeg",
+          "lang": "fr",
+          "watchlist": [1, 5],
+          "favorites": []
+        }
+      ]
     }
   ],
   "recommendations": [
