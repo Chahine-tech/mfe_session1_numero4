@@ -21,10 +21,10 @@ module.exports = {
   output: {
     filename: "bundle.js",
     path: path.resolve(__dirname, "dist"),
-    publicPath: "http://localhost:3003/", // URL publique de base pour les assets (IMPORTANT pour Module Federation)
+    publicPath: "http://localhost:3005/", // URL publique de base pour les assets (IMPORTANT pour Module Federation)
   },
   devServer: {
-    port: 3003, // Port du serveur de développement (IMPORTANT : doit être unique pour chaque MFE)
+    port: 3005, // Port du serveur de développement (IMPORTANT : doit être unique pour chaque MFE)
     static: {
       directory: path.join(__dirname, "public"),
     },

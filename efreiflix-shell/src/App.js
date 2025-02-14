@@ -155,7 +155,7 @@ const App = () => {
 
         {isPlayerLoaded ? (
           <Suspense fallback={<div>{t("loading.player")}</div>}>
-            <Player />
+            <Player onClose={() => setIsPlayerLoaded(false)} />
           </Suspense>
         ) : (
           <ContentArea>
@@ -170,7 +170,7 @@ const App = () => {
                 <Suspense
                   key={content.id}
                   fallback={
-                    <div style={{ height: 330, background: "#1a1a1a" }}></div>
+                    <div style={{ height: 330, background: "#1a1a1a" }} />
                   }
                 >
                   <ItemCard
@@ -190,7 +190,7 @@ const App = () => {
                 <Suspense
                   key={content.id}
                   fallback={
-                    <div style={{ height: 330, background: "#1a1a1a" }}></div>
+                    <div style={{ height: 330, background: "#1a1a1a" }} />
                   }
                 >
                   <ItemCard

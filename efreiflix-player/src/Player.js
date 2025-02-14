@@ -432,13 +432,15 @@ const Player = ({
 Player.propTypes = {
   title: PropTypes.string,
   subTitle: PropTypes.string,
-  description: PropTypes.string
+  description: PropTypes.string,
+  onClose: PropTypes.func.isRequired,
 };
 
 Player.defaultProps = {
   title: "Big Buck Bunny",
   subTitle: "S1:E1",
-  description: "A large and lovable rabbit deals with three tiny bullies, led by a flying squirrel, who are determined to squelch his happiness."
+  description: "A large and lovable rabbit deals with three tiny bullies, led by a flying squirrel, who are determined to squelch his happiness.",
+  onClose: () => {},
 }; 
 
 export default Player; 

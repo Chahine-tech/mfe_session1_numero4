@@ -46,8 +46,8 @@ module.exports = {
         // Format: "nom_remote@url/fichier_entree.js"
         header: "header@http://localhost:3001/remoteEntry.js", // Configuration pour consommer le MFE 'header'
         footer: "footer@http://localhost:3002/remoteEntry.js", // Configuration pour consommer le MFE 'footer'
-        player: "player@http://localhost:3004/remoteEntry.js", // Ajout du player
         item: "item@http://localhost:3003/remoteEntry.js", // Add this line
+        player: "player@http://localhost:3004/remoteEntry.js", // Ajout du player
         // exemple de footer
         // un autre exemple de MFE
         // search: 'search@http://localhost:3003/remoteEntry.js', // Configuration pour consommer le MFE 'search'

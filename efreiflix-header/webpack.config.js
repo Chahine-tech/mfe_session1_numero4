@@ -60,6 +60,7 @@ module.exports = {
       filename: "remoteEntry.js", // Nom du fichier d'entrée exposé (conventionnel)
       remotes: {
         shell: "shell@http://localhost:3000/remoteEntry.js",
+        searchbar: "searchbar@http://localhost:3005/remoteEntry.js",
       },
       exposes: {
         "./Header": "./src/Header", // Expose le composant Header (chemin relatif)
