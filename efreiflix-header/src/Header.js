@@ -2,9 +2,6 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import styled from "styled-components";
 import "./i18n";
-import { Search, Bell, User } from 'lucide-react';
-import './styles.css';
-const SearchBar = React.lazy(() => import("searchbar/SearchBar"));
 
 const HeaderContainer = styled.header`
   background: linear-gradient(180deg, rgba(0, 0, 0, 0.8) 0%, transparent 100%);
@@ -76,13 +73,6 @@ const Header = () => {
         <NavLink href="/series">{t("navigation.series")}</NavLink>
         <NavLink href="/films">{t("navigation.movies")}</NavLink>
         <NavLink href="/nouveautes">{t("navigation.newReleases")}</NavLink>
-        <SearchBar /> 
-        <button className="size-9 flex items-center justify-center rounded-md hover:bg-accent hover:text-accent-foreground" type="button">
-          <Bell className="size-5" />
-        </button>
-        <button className="size-9 flex items-center justify-center rounded-md hover:bg-accent hover:text-accent-foreground" type="button">
-          <User className="size-5" />
-        </button>
       </Nav>
     </HeaderContainer>
   );
