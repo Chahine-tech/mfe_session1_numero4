@@ -1,28 +1,72 @@
 import * as React from 'react';
+import { BrowserRouter as Router, useLocation, Link as RouterLink } from 'react-router-dom';
 import Typography from '@mui/material/Typography';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
 import Link from '@mui/material/Link';
 import HomeIcon from '@mui/icons-material/Home';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
+import AppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
+import IconButton from '@mui/material/IconButton';
+import SearchIcon from '@mui/icons-material/Search';
+import NotificationsIcon from '@mui/icons-material/Notifications';
+import Avatar from '@mui/material/Avatar';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
 
-function handleClick(event) {
-    event.preventDefault();
-    console.info('You clicked a breadcrumb.');
-}
+function DynamicBreadcrumbs() {
+    const location = useLocation();
+    if (!location || !location.pathname) return null;
+    const pathnames = location.pathname.split('/').filter((x) => x);
 
-export default function CustomBreadcrumbs() {
     return (
-        <Breadcrumbs
-            separator={<NavigateNextIcon fontSize="small" />}
-            aria-label="breadcrumb"
-        >
-            <Link underline="hover" color="inherit" href="/">
+        <Breadcrumbs separator={<NavigateNextIcon fontSize="small" />} aria-label="breadcrumb">
+            <Link underline="hover" color="inherit" component={RouterLink} to="/">
                 <HomeIcon fontSize="small" sx={{ verticalAlign: 'middle', mb: 0.2 }} />
             </Link>
-            <Link underline="hover" color="inherit" href="/projects">
-                Projects
-            </Link>
-            <Typography color="text.primary">Project Nero</Typography>
+            {pathnames.map((value, index) => {
+                const to = `/${pathnames.slice(0, index + 1).join('/')}`;
+                const isLast = index === pathnames.length - 1;
+                return isLast ? (
+                    <Typography color="text.primary" key={to}>{value}</Typography>
+                ) : (
+                    <Link underline="hover" color="inherit" component={RouterLink} to={to} key={to}>
+                        {value}
+                    </Link>
+                );
+            })}
         </Breadcrumbs>
+    );
+}
+
+export default function NetflixNavBar() {
+    return (
+        <Router>
+            <AppBar position="static" sx={{ backgroundColor: 'black', padding: '0 20px' }}>
+                <Toolbar>
+                    <Typography variant="h6" sx={{ flexGrow: 1, fontWeight: 'bold', color: 'red', fontSize: '24px' }}>
+                        NETFLIX
+                    </Typography>
+                    <Box sx={{ flexGrow: 1, display: 'flex', gap: 3 }}>
+                        <Button color="inherit" component={RouterLink} to="/">Home</Button>
+                        <Button color="inherit" component={RouterLink} to="/tv-shows">TV Shows</Button>
+                        <Button color="inherit" component={RouterLink} to="/movies">Movies</Button>
+                        <Button color="inherit" component={RouterLink} to="/new-popular">New & Popular</Button>
+                        <Button color="inherit" component={RouterLink} to="/my-list">My List</Button>
+                        <Button color="inherit" component={RouterLink} to="/browse-languages">Browse by Languages</Button>
+                    </Box>
+                    <IconButton color="inherit">
+                        <SearchIcon />
+                    </IconButton>
+                    <IconButton color="inherit">
+                        <NotificationsIcon />
+                    </IconButton>
+                    <Avatar sx={{ bgcolor: 'red' }}>N</Avatar>
+                </Toolbar>
+            </AppBar>
+            <Box sx={{ p: 2 }}>
+                <DynamicBreadcrumbs />
+            </Box>
+        </Router>
     );
 }
