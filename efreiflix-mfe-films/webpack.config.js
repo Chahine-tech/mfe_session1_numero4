@@ -1,72 +1,64 @@
-const ModuleFederationPlugin = require("webpack/lib/container/ModuleFederationPlugin");
-const path = require("path");
-const { dependencies } = require("./package.json");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+const { ModuleFederationPlugin } = require("webpack").container;
+
+const isProd = process.env.NODE_ENV === 'production';
+const prodUrl = 'https://efrei-films-g1.vercel.app/';
 
 module.exports = {
-    entry: "./src/index.js",
-    mode: "production",
-    output: {
-        filename: "bundle.js",
-        path: path.resolve(__dirname, "dist"),
-        publicPath: "http://filmsmfe.vercel.app/", // Different port from header MFE
+  entry: "./src/index.js",
+  mode: process.env.NODE_ENV || "development",
+  output: {
+    publicPath: isProd ? prodUrl : 'auto',
+    filename: '[name].[contenthash].js'
+  },
+  devServer: {
+    port: 3003,
+    hot: true,
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, PATCH, OPTIONS",
+      "Access-Control-Allow-Headers": "X-Requested-With, content-type, Authorization"
     },
-    devServer: {
-        port: 3004,
-        static: {
-            directory: path.join(__dirname, "public"),
+    historyApiFallback: true,
+  },
+  module: {
+    rules: [
+      {
+        test: /\.jsx?$/,
+        loader: "babel-loader",
+        exclude: /node_modules/,
+        options: {
+          presets: ["@babel/preset-react"],
         },
-        headers: {
-            "Access-Control-Allow-Origin": "*",
-            "Access-Control-Allow-Methods":
-                "GET, POST, PUT, DELETE, PATCH, OPTIONS",
-            "Access-Control-Allow-Headers":
-                "X-Requested-With, content-type, Authorization",
-        },
-    },
-    module: {
-        rules: [
-            {
-                test: /\.(js|jsx)$/,
-                exclude: /node_modules/,
-                use: {
-                    loader: "babel-loader",
-                    options: {
-                        presets: ["@babel/preset-react", "@babel/preset-env"],
-                    },
-                },
-            },
-            {
-                test: /\.css$/,
-                use: ["style-loader", "css-loader", "postcss-loader"],
-            },
-        ],
-    },
-    plugins: [
-        new ModuleFederationPlugin({
-            name: "films",
-            filename: "remoteEntry.js",
-            exposes: {
-                "./Films": "./src/Films",
-            },
-            shared: {
-                react: {
-                    singleton: true,
-                    requiredVersion: dependencies.react,
-                    eager: true,
-                },
-                "react-dom": {
-                    singleton: true,
-                    requiredVersion: dependencies["react-dom"],
-                    eager: true,
-                },
-            },
-        }),
-        new HtmlWebpackPlugin({
-            template: "./public/index.html",
-        }),
+      },
+      {
+        test: /\.css$/,
+        use: ['style-loader', 'css-loader', 'postcss-loader'],
+      },
     ],
-    resolve: {
-        extensions: [".js", ".jsx"],
-    },
-};
+  },
+  plugins: [
+    new ModuleFederationPlugin({
+      name: "films",
+      filename: "remoteEntry.js",
+      exposes: {
+        "./Films": "./src/Films",
+      },
+      shared: {
+        react: { 
+          singleton: true,
+          requiredVersion: false,
+          eager: true
+        },
+        "react-dom": { 
+          singleton: true,
+          requiredVersion: false,
+          eager: true
+        }
+      },
+    }),
+    new HtmlWebpackPlugin({
+      template: "./public/index.html",
+    }),
+  ],
+}; 
