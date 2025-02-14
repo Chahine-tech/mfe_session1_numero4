@@ -1,12 +1,30 @@
-import React, { Suspense } from 'react';
+import React, { Suspense, useState } from 'react';
 import styled, { createGlobalStyle } from 'styled-components';
 
 const Header = React.lazy(() => import('header/Header'));
+const Player = React.lazy(() => import('player/Player'));
 const Footer = React.lazy(() => import('footer/Footer'));
 
 const GlobalStyle = createGlobalStyle`
   * {
     font-family: 'Montserrat', sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  // scrollbar
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background:rgb(0, 0, 0);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: red;
+    border-radius: 5px;
   }
 `;
 
@@ -93,6 +111,8 @@ const ItemCard = styled.div`
 `;
 
 const App = () => {
+  const [isPlayerLoaded, setIsPlayerLoaded] = useState(false);
+
   return (
     <>
       <GlobalStyle />
@@ -110,7 +130,7 @@ const App = () => {
           <SectionTitle>Tendances actuelles</SectionTitle>
           <ItemsGrid>
             {[...Array(6)].map((_, i) => (
-              <ItemCard key={i}>
+              <ItemCard key={i} onClick={() => setIsPlayerLoaded(true)}>
                 <img 
                   src={`https://picsum.photos/300/450?random=${i}`} 
                   alt="Content placeholder" 
@@ -122,7 +142,7 @@ const App = () => {
           <SectionTitle>Séries populaires</SectionTitle>
           <ItemsGrid>
             {[...Array(6)].map((_, i) => (
-              <ItemCard key={i}>
+              <ItemCard key={i} onClick={() => setIsPlayerLoaded(true)}>
                 <img 
                   src={`https://picsum.photos/300/450?random=${i + 10}`} 
                   alt="Content placeholder" 
@@ -131,6 +151,14 @@ const App = () => {
             ))}
           </ItemsGrid>
         </ContentArea>
+
+        {
+          isPlayerLoaded && (
+            <Suspense fallback={<div style={{ color: 'white', padding: '1rem' }}>Chargement du lecteur vidéo...</div>}>
+              <Player onClose={() => setIsPlayerLoaded(false)} />
+            </Suspense>
+          )
+        }
 
         <Suspense fallback={<div style={{ color: 'white', padding: '1rem' }}>Chargement du footer...</div>}>
           <Footer />

@@ -10,7 +10,8 @@ import './styles/Player.css';
 const Player = ({ 
   title, 
   subTitle, 
-  description 
+  description,
+  onClose
 }) => {
   const [playing, setPlaying] = useState(false);
   const [showControls, setShowControls] = useState(false);
@@ -72,6 +73,7 @@ const Player = ({
   const handleBack = () => {
     // Implement navigation back logic
     console.log('Going back');
+    onClose();
   };
 
   const handleNext = () => {
@@ -289,6 +291,19 @@ const Player = ({
     };
   }, [handlePlayPause]);
 
+  // Add autoplay effect
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.play()
+        .then(() => {
+          setPlaying(true);
+        })
+        .catch((error) => {
+          console.error('Autoplay failed:', error);
+        });
+    }
+  }, []);
+
   return (
     <div 
       ref={containerRef}
@@ -413,6 +428,6 @@ Player.defaultProps = {
   title: "Big Buck Bunny",
   subTitle: "S1:E1",
   description: "A large and lovable rabbit deals with three tiny bullies, led by a flying squirrel, who are determined to squelch his happiness."
-};
+}; 
 
 export default Player; 
