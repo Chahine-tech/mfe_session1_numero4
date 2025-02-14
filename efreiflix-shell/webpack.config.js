@@ -1,10 +1,10 @@
 /**
  * Configuration Webpack pour l'application Shell (Host Application)
- * 
+ *
  * Ce fichier configure l'application principale qui va héberger et orchestrer
  * les différents micro-frontends. En tant qu'application hôte, elle est responsable
  * de l'importation et de l'intégration des composants distants.
- * 
+ *
  * Points clés :
  * - Configuration du port de développement (3000)
  * - Déclaration des micro-frontends distants (remotes)
@@ -20,7 +20,7 @@ module.exports = {
   mode: "development",
   devServer: {
     port: 3000, // Port distinct du micro-frontend Header (3001)
-    hot: true,  // Activation du Hot Module Replacement
+    hot: true, // Activation du Hot Module Replacement
   },
   module: {
     rules: [
@@ -41,9 +41,10 @@ module.exports = {
       remotes: {
         // Déclaration du micro-frontend Header
         // Format: "nom_remote@url/fichier_entree.js"
-        header: 'header@http://localhost:3001/remoteEntry.js', // Configuration pour consommer le MFE 'header'
-        footer: 'footer@http://localhost:3002/remoteEntry.js', // Configuration pour consommer le MFE 'footer'
-        player: 'player@http://localhost:3004/remoteEntry.js', // Ajout du player
+        header: "header@http://localhost:3001/remoteEntry.js", // Configuration pour consommer le MFE 'header'
+        footer: "footer@http://localhost:3002/remoteEntry.js", // Configuration pour consommer le MFE 'footer'
+        player: "player@http://localhost:3004/remoteEntry.js", // Ajout du player
+        item: "item@http://localhost:3003/remoteEntry.js", // Add this line
         // exemple de footer
         // un autre exemple de MFE
         // search: 'search@http://localhost:3003/remoteEntry.js', // Configuration pour consommer le MFE 'search'
@@ -51,16 +52,16 @@ module.exports = {
 
       shared: {
         // Configuration du partage des dépendances
-        react: { 
-          singleton: true,     // Une seule instance de React
+        react: {
+          singleton: true, // Une seule instance de React
           requiredVersion: false, // Pas de vérification stricte des versions
-          eager: true         // Chargement immédiat pour l'app host
+          eager: true, // Chargement immédiat pour l'app host
         },
-        "react-dom": { 
+        "react-dom": {
           singleton: true,
           requiredVersion: false,
-          eager: true
-        }
+          eager: true,
+        },
       },
     }),
     // Génération du HTML avec le point d'entrée
@@ -68,4 +69,4 @@ module.exports = {
       template: "./public/index.html",
     }),
   ],
-}; 
+};

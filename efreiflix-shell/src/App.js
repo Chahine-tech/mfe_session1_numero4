@@ -1,9 +1,10 @@
-import React, { Suspense, useState } from 'react';
-import styled, { createGlobalStyle } from 'styled-components';
+import React, { Suspense, useState } from "react";
+import styled, { createGlobalStyle } from "styled-components";
 
-const Header = React.lazy(() => import('header/Header'));
-const Player = React.lazy(() => import('player/Player'));
-const Footer = React.lazy(() => import('footer/Footer'));
+const Header = React.lazy(() => import("header/Header"));
+const Player = React.lazy(() => import("player/Player"));
+const Footer = React.lazy(() => import("footer/Footer"));
+const ItemCard = React.lazy(() => import("item/ItemCard"));
 
 const GlobalStyle = createGlobalStyle`
   * {
@@ -34,7 +35,7 @@ const MainContainer = styled.div`
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
 `;
 
 const ContentArea = styled.main`
@@ -51,15 +52,15 @@ const HeroSection = styled.div`
     background: linear-gradient(45deg, #e50914, #eb144c);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    font-family: 'Montserrat', sans-serif;
+    font-family: "Montserrat", sans-serif;
   }
-  
+
   p {
     font-size: 1.4rem;
     max-width: 600px;
     line-height: 1.6;
-    color: rgba(255,255,255,0.8);
-    font-family: 'Montserrat', sans-serif;
+    color: rgba(255, 255, 255, 0.8);
+    font-family: "Montserrat", sans-serif;
   }
 `;
 
@@ -70,7 +71,7 @@ const SectionTitle = styled.h3`
   padding-left: 20px;
 
   &:before {
-    content: '';
+    content: "";
     position: absolute;
     left: 0;
     top: 50%;
@@ -88,28 +89,6 @@ const ItemsGrid = styled.div`
   margin-bottom: 4rem;
 `;
 
-const ItemCard = styled.div`
-  border-radius: 4px;
-  overflow: hidden;
-  transition: transform 0.3s ease;
-  cursor: pointer;
-  
-  &:hover {
-    transform: translateY(-5px);
-    
-    img {
-      opacity: 0.8;
-    }
-  }
-
-  img {
-    width: 100%;
-    height: 330px;
-    object-fit: cover;
-    transition: opacity 0.3s ease;
-  }
-`;
-
 const App = () => {
   const [isPlayerLoaded, setIsPlayerLoaded] = useState(false);
 
@@ -117,50 +96,81 @@ const App = () => {
     <>
       <GlobalStyle />
       <MainContainer>
-        <Suspense fallback={<div style={{ color: 'white', padding: '1rem' }}>Chargement du header...</div>}>
+        <Suspense
+          fallback={
+            <div style={{ color: "white", padding: "1rem" }}>
+              Chargement du header...
+            </div>
+          }
+        >
           <Header />
         </Suspense>
 
         <ContentArea>
           <HeroSection>
             <h2>Bienvenue sur EFREIFlix</h2>
-            <p>Des milliers de films, séries et documentaires à découvrir. Regardez où vous voulez. Annulez quand vous voulez.</p>
+            <p>
+              Des milliers de films, séries et documentaires à découvrir.
+              Regardez où vous voulez. Annulez quand vous voulez.
+            </p>
           </HeroSection>
 
           <SectionTitle>Tendances actuelles</SectionTitle>
           <ItemsGrid>
             {[...Array(6)].map((_, i) => (
-              <ItemCard key={i} onClick={() => setIsPlayerLoaded(true)}>
-                <img 
-                  src={`https://picsum.photos/300/450?random=${i}`} 
-                  alt="Content placeholder" 
+              <Suspense
+                key={i}
+                fallback={
+                  <div style={{ height: 330, background: "#1a1a1a" }}></div>
+                }
+              >
+                <ItemCard
+                  imageSrc={`https://picsum.photos/300/450?random=${i}`}
+                  alt="Content placeholder"
+                  onClick={() => setIsPlayerLoaded(true)}
                 />
-              </ItemCard>
+              </Suspense>
             ))}
           </ItemsGrid>
 
           <SectionTitle>Séries populaires</SectionTitle>
           <ItemsGrid>
             {[...Array(6)].map((_, i) => (
-              <ItemCard key={i} onClick={() => setIsPlayerLoaded(true)}>
-                <img 
-                  src={`https://picsum.photos/300/450?random=${i + 10}`} 
-                  alt="Content placeholder" 
+              <Suspense
+                key={i}
+                fallback={
+                  <div style={{ height: 330, background: "#1a1a1a" }}></div>
+                }
+              >
+                <ItemCard
+                  imageSrc={`https://picsum.photos/300/450?random=${i + 10}`}
+                  alt="Content placeholder"
+                  onClick={() => setIsPlayerLoaded(true)}
                 />
-              </ItemCard>
+              </Suspense>
             ))}
           </ItemsGrid>
         </ContentArea>
 
-        {
-          isPlayerLoaded && (
-            <Suspense fallback={<div style={{ color: 'white', padding: '1rem' }}>Chargement du lecteur vidéo...</div>}>
-              <Player onClose={() => setIsPlayerLoaded(false)} />
-            </Suspense>
-          )
-        }
+        {isPlayerLoaded && (
+          <Suspense
+            fallback={
+              <div style={{ color: "white", padding: "1rem" }}>
+                Chargement du lecteur vidéo...
+              </div>
+            }
+          >
+            <Player onClose={() => setIsPlayerLoaded(false)} />
+          </Suspense>
+        )}
 
-        <Suspense fallback={<div style={{ color: 'white', padding: '1rem' }}>Chargement du footer...</div>}>
+        <Suspense
+          fallback={
+            <div style={{ color: "white", padding: "1rem" }}>
+              Chargement du footer...
+            </div>
+          }
+        >
           <Footer />
         </Suspense>
       </MainContainer>
